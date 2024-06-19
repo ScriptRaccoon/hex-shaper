@@ -69,7 +69,7 @@ export class Disk {
 		this.canvas.addEventListener("click", async (e) => {
 			if (!this.enabled) return
 			const clockwise = e.clientX - canvas_left > this.canvas.width / 2
-			await this.rotate(clockwise)
+			await this.rotate({ clockwise })
 		})
 
 		this.canvas.addEventListener("focus", () => {
@@ -84,11 +84,14 @@ export class Disk {
 
 	/**
 	 * Animate the rotation of the disk by 60 degrees in the given direction
-	 * @param {boolean} clockwise - Whether the disk should rotate clockwise
-	 * @param {number} [speed] - The speed of the rotation
+	 * @param {object} options - The options for the rotation
+	 * @param {boolean} options.clockwise - Whether the disk should rotate clockwise
+	 * @param {number} [options.speed] - The speed of the rotation
 	 * @returns {Promise<void>} - A promise that resolves when the rotation is complete
 	 */
-	rotate(clockwise, speed = Disk.DEFAULT_SPEED) {
+	rotate(options) {
+		const { clockwise, speed = Disk.DEFAULT_SPEED } = options
+
 		if (this.rotating) return Promise.resolve()
 
 		this.before_rotate()

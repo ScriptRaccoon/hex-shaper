@@ -5,7 +5,7 @@ import { disk1_data, disk2_data, disk3_data } from "./config.js"
 import { Disk } from "./disk.js"
 
 /**
- * Puzzle class
+ * Puzzle class representing the Hex Shaper
  */
 export class Puzzle {
 	constructor() {
@@ -39,7 +39,7 @@ export class Puzzle {
 
 		for (const disk of this.disks) {
 			disk.after_rotate = /** @type {boolean} */ (clockwise) => {
-				this.rotate_colors(disk, clockwise)
+				this.rotate_colors({ disk, clockwise })
 				for (const disky of this.disks) {
 					disky.enabled = true
 				}
@@ -102,10 +102,10 @@ export class Puzzle {
 		if (this.turning || !this.focussed_disc) return
 		switch (key) {
 			case "ArrowRight":
-				this.focussed_disc.rotate(true)
+				this.focussed_disc.rotate({ clockwise: true })
 				break
 			case "ArrowLeft":
-				this.focussed_disc.rotate(false)
+				this.focussed_disc.rotate({ clockwise: false })
 				break
 			case "Escape":
 				if (document.activeElement instanceof HTMLElement) {
@@ -126,10 +126,11 @@ export class Puzzle {
 
 	/**
 	 * Rotate a disk and update the other disks accordingly
-	 * @param {Disk} disk - The disk to rotate
-	 * @param {boolean} clockwise - Whether to rotate the disk clockwise or not
+	 * @param {object} options - The options for the rotation
+	 * @param {Disk} options.disk - The disk to rotate
+	 * @param {boolean} options.clockwise - Whether to rotate the disk clockwise or not
 	 */
-	rotate_colors(disk, clockwise) {
+	rotate_colors({ disk, clockwise }) {
 		disk.colors = clockwise
 			? [...disk.colors.slice(2, 12), disk.colors[0], disk.colors[1]]
 			: [disk.colors[10], disk.colors[11], ...disk.colors.slice(0, 10)]
@@ -188,7 +189,6 @@ export class Puzzle {
 	 */
 	async scramble(number_turns = 100) {
 		if (this.turning) return
-		const scrambling_speed = Math.PI / 20
 
 		this.prepare_scrambling()
 
@@ -207,7 +207,7 @@ export class Puzzle {
 				continue
 			}
 			last_turn = turn
-			await disk.rotate(clockwise, scrambling_speed)
+			await disk.rotate({ clockwise, speed: Math.PI / 20 })
 		}
 
 		this.finish_scrambling()
