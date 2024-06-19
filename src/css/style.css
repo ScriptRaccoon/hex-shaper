@@ -7,6 +7,8 @@
 
 	:root {
 		--outline: #eee;
+		--max-width: 500px;
+		--padding: 1rem;
 	}
 
 	body {
@@ -16,8 +18,8 @@
 	}
 
 	main {
-		width: 500px;
-		height: 500px;
+		width: min(calc(100vmin - var(--padding)), var(--max-width));
+		height: min(calc(100vmin - var(--padding)), var(--max-width));
 		margin-inline: auto;
 		position: relative;
 		display: flex;
@@ -120,11 +122,11 @@
 
 @layer footer {
 	footer {
-		max-width: 600px;
+		max-width: var(--max-width);
 		margin-inline: auto;
-		padding-inline: 0.5rem;
+		padding-inline: var(--padding);
 		line-height: 1.5;
-		margin-bottom: 2rem;
+		margin-bottom: 1.5rem;
 	}
 
 	summary {

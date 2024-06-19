@@ -3,25 +3,30 @@
 import { canvas1, canvas2, canvas3, ctx1, ctx2, ctx3 } from "./dom.js"
 
 /**
+ * Minimum of the viewport width and height, capped at 500
+ */
+const vmin = Math.min(window.innerWidth, window.innerHeight, 500)
+
+/**
  * Length of the side of the equilateral triangle,
  * which is the distance between the centers of the circles.
  */
-export const l = 200
+export const l = Math.round(0.39 * vmin)
 
 /**
  * Radius of the circles
  */
-export const r = 140
+export const r = Math.round(0.27 * vmin)
 
 /**
  * Height of the equilateral triangle
  */
-export const h = (Math.sqrt(3) / 2) * l
+export const h = 0.5 * Math.sqrt(3) * l
 
 /**
  * Width of the lines
  */
-export const w = 6
+export const w = Math.round(0.01 * vmin)
 
 /**
  * Colors of the pieces
