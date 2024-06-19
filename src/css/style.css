@@ -90,13 +90,9 @@
 		position: absolute;
 		z-index: 0;
 		cursor: pointer;
-		--speed: 250ms;
-		--easing: ease-in-out;
 	}
 
 	canvas.scrambling {
-		--speed: 130ms;
-		--easing: linear;
 		cursor: not-allowed;
 	}
 
@@ -105,18 +101,8 @@
 		outline: 0.25rem solid var(--outline);
 	}
 
-	canvas.top {
+	canvas.rotating {
 		z-index: 1;
-	}
-
-	canvas.rotate-clockwise {
-		transition: rotate var(--speed) var(--easing);
-		rotate: 60deg;
-	}
-
-	canvas.rotate-anticlockwise {
-		transition: rotate var(--speed) var(--easing);
-		rotate: -60deg;
 	}
 }
 

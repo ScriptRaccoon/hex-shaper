@@ -7,6 +7,8 @@ import { clear_canvas, draw_circle } from "./utils.js"
  * Disk class
  */
 export class Disk {
+	static DEFAULT_SPEED = Math.PI / 40
+
 	/**
 	 * @param {import("./config.js").DiskData} data - The data for the disk
 	 */
@@ -64,10 +66,10 @@ export class Disk {
 		this.canvas.style.setProperty("translate", `${this.center.x}px ${this.center.y}px`)
 		const canvas_left = this.canvas.getBoundingClientRect().left
 
-		this.canvas.addEventListener("click", (e) => {
+		this.canvas.addEventListener("click", async (e) => {
 			if (!this.enabled) return
 			const clockwise = e.clientX - canvas_left > this.canvas.width / 2
-			this.animate_rotation(clockwise)
+			await this.rotate(clockwise)
 		})
 
 		this.canvas.addEventListener("focus", () => {
@@ -81,27 +83,40 @@ export class Disk {
 	}
 
 	/**
-	 * Animate the rotation of the disk
+	 * Animate the rotation of the disk by 60 degrees in the given direction
 	 * @param {boolean} clockwise - Whether the disk should rotate clockwise
-	 * @async
+	 * @param {number} [speed] - The speed of the rotation
+	 * @returns {Promise<void>} - A promise that resolves when the rotation is complete
 	 */
-	animate_rotation(clockwise) {
+	rotate(clockwise, speed = Disk.DEFAULT_SPEED) {
+		if (this.rotating) return Promise.resolve()
+
+		this.before_rotate()
+		this.canvas.classList.add("rotating")
+		const target_angle = clockwise ? -Math.PI / 3 : Math.PI / 3
+		let angle = 0
+		this.rotating = true
+
 		return new Promise((resolve) => {
-			this.before_rotate()
+			const animation = () => {
+				angle += clockwise ? -speed : speed
+				this.draw(angle)
 
-			const rotation_class = clockwise ? "rotate-clockwise" : "rotate-anticlockwise"
+				const done = Math.abs(angle) >= Math.abs(target_angle)
 
-			const finish_transition = () => {
-				this.canvas.classList.remove(rotation_class)
+				if (!done) {
+					requestAnimationFrame(animation)
+					return
+				}
+
+				this.draw(target_angle)
+				this.canvas.classList.remove("rotating")
+				this.rotating = false
 				this.after_rotate(clockwise)
-				this.canvas.classList.remove("top")
-				setTimeout(resolve, 0)
+				resolve()
 			}
 
-			this.canvas.addEventListener("transitionend", finish_transition, { once: true })
-
-			this.canvas.classList.add(rotation_class)
-			this.canvas.classList.add("top")
+			requestAnimationFrame(animation)
 		})
 	}
 
@@ -150,9 +165,14 @@ export class Disk {
 	/**
 	 * Draw the disk by drawing the pieces of the disk
 	 * and the arcs that separate them
+	 * @param {number} [angle] - The angle of rotation of the disk
 	 */
-	draw() {
+	draw(angle = 0) {
 		clear_canvas(this.ctx)
+
+		this.ctx.save()
+		this.ctx.rotate(angle)
+
 		draw_circle(this.ctx, 0, 0, r, this.main_color)
 
 		this.ctx.arc(0, 0, r + 0.5 * w, 0, 2 * Math.PI)
@@ -173,6 +193,8 @@ export class Disk {
 		draw_circle(this.ctx, -l / 2, h, r)
 		draw_circle(this.ctx, l / 2, -h, r)
 		draw_circle(this.ctx, -l / 2, -h, r)
+
+		this.ctx.restore()
 	}
 
 	/**

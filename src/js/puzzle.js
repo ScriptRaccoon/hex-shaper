@@ -39,7 +39,7 @@ export class Puzzle {
 
 		for (const disk of this.disks) {
 			disk.after_rotate = /** @type {boolean} */ (clockwise) => {
-				this.rotate_disk(disk, clockwise)
+				this.rotate_colors(disk, clockwise)
 				for (const disky of this.disks) {
 					disky.enabled = true
 				}
@@ -102,10 +102,10 @@ export class Puzzle {
 		if (this.turning || !this.focussed_disc) return
 		switch (key) {
 			case "ArrowRight":
-				this.focussed_disc.animate_rotation(true)
+				this.focussed_disc.rotate(true)
 				break
 			case "ArrowLeft":
-				this.focussed_disc.animate_rotation(false)
+				this.focussed_disc.rotate(false)
 				break
 			case "Escape":
 				if (document.activeElement instanceof HTMLElement) {
@@ -129,7 +129,7 @@ export class Puzzle {
 	 * @param {Disk} disk - The disk to rotate
 	 * @param {boolean} clockwise - Whether to rotate the disk clockwise or not
 	 */
-	rotate_disk(disk, clockwise) {
+	rotate_colors(disk, clockwise) {
 		disk.colors = clockwise
 			? [...disk.colors.slice(2, 12), disk.colors[0], disk.colors[1]]
 			: [disk.colors[10], disk.colors[11], ...disk.colors.slice(0, 10)]
@@ -188,6 +188,7 @@ export class Puzzle {
 	 */
 	async scramble(number_turns = 100) {
 		if (this.turning) return
+		const scrambling_speed = Math.PI / 20
 
 		this.prepare_scrambling()
 
@@ -206,7 +207,7 @@ export class Puzzle {
 				continue
 			}
 			last_turn = turn
-			await disk.animate_rotation(clockwise)
+			await disk.rotate(clockwise, scrambling_speed)
 		}
 
 		this.finish_scrambling()
