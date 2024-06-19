@@ -134,48 +134,12 @@ export class Puzzle {
 	rotate_colors({ disk, clockwise }) {
 		disk.colors = rotate_array_left(disk.colors, clockwise ? 2 : -2)
 
-		const disk1 = this.get_disk("1")
-		const disk2 = this.get_disk("2")
-		const disk3 = this.get_disk("3")
-
-		if (!disk1 || !disk2 || !disk3) return
-
-		switch (disk.id) {
-			// disk 1 is rotated
-			case "1":
-				// action on disk 2
-				disk2.colors[0] = disk1.colors[4]
-				disk2.colors[11] = disk1.colors[5]
-				disk2.colors[10] = disk1.colors[6]
-				// action on disk 3
-				disk3.colors[0] = disk1.colors[8]
-				disk3.colors[1] = disk1.colors[7]
-				disk3.colors[2] = disk1.colors[6]
-				break
-			// disk 2 is rotated
-			case "2":
-				// action on disk 1
-				disk1.colors[4] = disk2.colors[0]
-				disk1.colors[5] = disk2.colors[11]
-				disk1.colors[6] = disk2.colors[10]
-				// action on disk 3
-				disk3.colors[2] = disk2.colors[10]
-				disk3.colors[3] = disk2.colors[9]
-				disk3.colors[4] = disk2.colors[8]
-				break
-			// disk 3 is rotated
-			case "3":
-				// action on disk 1
-				disk1.colors[8] = disk3.colors[0]
-				disk1.colors[7] = disk3.colors[1]
-				disk1.colors[6] = disk3.colors[2]
-				// action on disk 2
-				disk2.colors[10] = disk3.colors[2]
-				disk2.colors[9] = disk3.colors[3]
-				disk2.colors[8] = disk3.colors[4]
-				break
-			default:
-				break
+		for (const other_disk of this.disks) {
+			if (other_disk === disk) continue
+			const mapping = disk.overlaps[other_disk.id]
+			for (const [index, other_index] of Object.entries(mapping)) {
+				other_disk.colors[other_index] = disk.colors[index]
+			}
 		}
 
 		this.draw()

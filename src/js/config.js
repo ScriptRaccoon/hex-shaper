@@ -43,14 +43,20 @@ export const COLORS = Object.freeze({
 })
 
 /**
+ * Overlaps of a disk with other disks, encoding by a dictionary of piece indices for each disk id.
+ * @typedef {Record<string, Record<number, number>>} Overlaps
+ */
+
+/**
  * Data to create a disk.
- * @typedef {Object} DiskData
+ * @typedef {object} DiskData
  * @property {string} id - The unique identifier for the disk.
  * @property {string} main_color - The main color of the disk.
  * @property {readonly string[]} initial_colors - The initial colors of the disk.
  * @property {HTMLCanvasElement} canvas - The canvas element the disk is drawn on.
  * @property {CanvasRenderingContext2D} ctx - The canvas context used for drawing.
  * @property {{x: number, y: number}} center - The center position of the disk.
+ * @property {Overlaps} overlaps - The overlaps of the disk with other disks.
  */
 
 /**
@@ -77,6 +83,10 @@ export const disk1_data = {
 	canvas: canvas1,
 	ctx: ctx1,
 	center: { x: 0, y: -h / 2 },
+	overlaps: {
+		2: { 4: 0, 5: 11, 6: 10 },
+		3: { 8: 0, 7: 1, 6: 2 },
+	},
 }
 
 /**
@@ -103,6 +113,10 @@ export const disk2_data = {
 	canvas: canvas2,
 	ctx: ctx2,
 	center: { x: -l / 2, y: h / 2 },
+	overlaps: {
+		1: { 0: 4, 11: 5, 10: 6 },
+		3: { 10: 2, 9: 3, 8: 4 },
+	},
 }
 
 /**
@@ -129,4 +143,8 @@ export const disk3_data = {
 	canvas: canvas3,
 	ctx: ctx3,
 	center: { x: l / 2, y: h / 2 },
+	overlaps: {
+		1: { 2: 6, 1: 7, 0: 8 },
+		2: { 2: 10, 3: 9, 4: 8 },
+	},
 }

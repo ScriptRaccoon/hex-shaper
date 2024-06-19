@@ -13,7 +13,7 @@ export class Disk {
 	 * @param {import("./config.js").DiskData} data - The data for the disk
 	 */
 	constructor(data) {
-		const { id, canvas, ctx, center, main_color, initial_colors } = data
+		const { id, canvas, ctx, center, main_color, initial_colors, overlaps } = data
 		this.id = id
 		this.canvas = canvas
 		this.ctx = ctx
@@ -21,6 +21,7 @@ export class Disk {
 		this.initial_colors = initial_colors
 		this.colors = [...initial_colors]
 		this.main_color = main_color
+		this.overlaps = overlaps
 		this.enabled = true
 
 		/**
