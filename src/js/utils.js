@@ -1,7 +1,7 @@
 // @ts-check
 
 /**
- * Clears the canvas context with a threshold
+ * Clears a canvas context. Uses a threshold
  * to prevent antialiasing artifacts
  * @param {CanvasRenderingContext2D} ctx
  */
@@ -14,7 +14,7 @@ export function clear_canvas(ctx) {
 }
 
 /**
- * Draws a circle on the canvas context
+ * Draws a circle on a canvas context
  * @param {CanvasRenderingContext2D} ctx
  * @param {number} x
  * @param {number} y
@@ -30,4 +30,15 @@ export function draw_circle(ctx, x, y, r, color) {
 	}
 	ctx.stroke()
 	ctx.closePath()
+}
+
+/**
+ * Rotates an array to the left by n positions
+ * @template T - The type of the array elements
+ * @param {T[]} arr - The array to rotate
+ * @param {number} n - The number of positions to rotate the array (can be negative)
+ * @returns {T[]} - The rotated array
+ */
+export function rotate_array_left(arr, n) {
+	return arr.slice(n).concat(arr.slice(0, n))
 }

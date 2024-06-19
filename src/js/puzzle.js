@@ -3,6 +3,7 @@
 import { reset_btn, scramble_btn } from "./dom.js"
 import { disk1_data, disk2_data, disk3_data } from "./config.js"
 import { Disk } from "./disk.js"
+import { rotate_array_left } from "./utils.js"
 
 /**
  * Puzzle class representing the Hex Shaper
@@ -131,9 +132,7 @@ export class Puzzle {
 	 * @param {boolean} options.clockwise - Whether to rotate the disk clockwise or not
 	 */
 	rotate_colors({ disk, clockwise }) {
-		disk.colors = clockwise
-			? [...disk.colors.slice(2, 12), disk.colors[0], disk.colors[1]]
-			: [disk.colors[10], disk.colors[11], ...disk.colors.slice(0, 10)]
+		disk.colors = rotate_array_left(disk.colors, clockwise ? 2 : -2)
 
 		const disk1 = this.get_disk("1")
 		const disk2 = this.get_disk("2")
