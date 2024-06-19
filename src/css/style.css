@@ -1,0 +1,139 @@
+@layer base {
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	:root {
+		--outline: #eee;
+	}
+
+	body {
+		font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+		color: #eee;
+		background-color: #111;
+	}
+
+	main {
+		width: 500px;
+		height: 500px;
+		margin-inline: auto;
+		position: relative;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+}
+
+@layer typography {
+	a {
+		color: inherit;
+	}
+
+	p {
+		margin-block: 1rem;
+	}
+}
+
+@layer header {
+	header {
+		padding-block: 1rem;
+	}
+
+	h1 {
+		font-weight: 600;
+		font-size: 3.25rem;
+		text-align: center;
+		font-style: italic;
+	}
+}
+
+@layer menu {
+	menu {
+		display: flex;
+		justify-content: center;
+		margin-block: 1rem;
+		gap: 1rem;
+	}
+
+	button {
+		font: inherit;
+		border: none;
+		cursor: pointer;
+		background-color: rgb(45, 94, 133);
+		color: white;
+		font-weight: 600;
+		padding: 0.3rem 0.8rem;
+	}
+
+	button:hover {
+		filter: brightness(1.1);
+	}
+
+	button:focus-visible {
+		outline: 2px solid var(--outline);
+		outline-offset: 0.25rem;
+	}
+
+	button:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+}
+
+@layer canvas {
+	canvas {
+		border-radius: 50%;
+		position: absolute;
+		z-index: 0;
+		cursor: pointer;
+		--speed: 250ms;
+		--easing: ease-in-out;
+	}
+
+	canvas.scrambling {
+		--speed: 130ms;
+		--easing: linear;
+		cursor: not-allowed;
+	}
+
+	canvas:focus-visible {
+		z-index: 2;
+		outline: 0.25rem solid var(--outline);
+	}
+
+	canvas.top {
+		z-index: 1;
+	}
+
+	canvas.rotate-clockwise {
+		transition: rotate var(--speed) var(--easing);
+		rotate: 60deg;
+	}
+
+	canvas.rotate-anticlockwise {
+		transition: rotate var(--speed) var(--easing);
+		rotate: -60deg;
+	}
+}
+
+@layer footer {
+	footer {
+		max-width: 600px;
+		margin-inline: auto;
+		padding-inline: 0.5rem;
+		line-height: 1.5;
+		margin-bottom: 2rem;
+	}
+
+	summary {
+		font-weight: 600;
+		cursor: pointer;
+	}
+
+	summary:focus-visible {
+		outline: 2px solid var(--outline);
+		outline-offset: 0.25rem;
+	}
+}

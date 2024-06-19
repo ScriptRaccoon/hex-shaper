@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Hex Shaper</title>
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+	<body>
+		<header>
+			<h1>Hex Shaper</h1>
+		</header>
+
+		<main>
+			<canvas tabindex="0" id="canvas1" aria-label="disk 1"></canvas>
+			<canvas tabindex="0" id="canvas2" aria-label="disk 2"></canvas>
+			<canvas tabindex="0" id="canvas3" aria-label="disk 3"></canvas>
+		</main>
+
+		<menu>
+			<button id="scramble_btn">Scramble</button>
+			<button id="reset_btn">Reset</button>
+		</menu>
+
+		<footer>
+			<details>
+				<summary>Help</summary>
+				<div>
+					<p>
+						This is a browser game simulating the Hex Shaper puzzle, a flat twisty puzzle manufactured by
+						Very Puzzle (<a
+							href="https://verypuzzle.com/index.php?route=product/product&product_id=51"
+							target="_blank"
+							>Product Page</a
+						>).
+					</p>
+					<p>
+						There are three overlapping disks with 12 pieces each (and one center piece). The disks can be
+						rotated, and the goal is to bring them back to their original configuration.
+					</p>
+					<p>
+						To rotate a disk, just click on it. It rotates clockwise when you click on the right side,
+						otherwise anti-clockwise. Keyboard navigation is also supported: The disks can be selected with
+						Tab and rotated with the arrow keys.
+					</p>
+				</div>
+			</details>
+		</footer>
+
+		<script src="js/main.js" type="module"></script>
+	</body>
+</html>
