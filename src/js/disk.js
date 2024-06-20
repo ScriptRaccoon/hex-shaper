@@ -57,12 +57,16 @@ export class Disk {
 	 * Set up the disk
 	 */
 	setup() {
-		this.canvas.width = 2 * r + w
-		this.canvas.height = 2 * r + w
+		const ratio = window.devicePixelRatio || 1
+		const size = 2 * r + w
+		this.canvas.width = ratio * size
+		this.canvas.height = ratio * size
+		this.canvas.style.width = `${size}px`
+		this.canvas.style.height = `${size}px`
 		this.ctx.lineWidth = w
 		this.ctx.strokeStyle = COLORS.OUTLINE
 		this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2)
-		this.ctx.scale(1, -1)
+		this.ctx.scale(ratio, -ratio)
 
 		this.canvas.style.setProperty("translate", `${this.center.x}px ${this.center.y}px`)
 		const canvas_left = this.canvas.getBoundingClientRect().left
