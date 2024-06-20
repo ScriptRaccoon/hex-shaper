@@ -33,7 +33,7 @@ export const w = Math.round(0.01 * vmin)
  */
 export const COLORS = Object.freeze({
 	RED: "#f10",
-	BLUE: "#43f",
+	BLUE: "#22f",
 	GREEN: "#0f0",
 	PURPLE: "#f3f",
 	YELLOW: "#ff0",
