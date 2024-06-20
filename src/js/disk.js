@@ -183,7 +183,8 @@ export class Disk {
 
 		draw_circle(this.ctx, 0, 0, r, this.main_color)
 
-		this.ctx.arc(0, 0, r + 0.5 * w, 0, 2 * Math.PI)
+		this.ctx.beginPath()
+		this.ctx.arc(0, 0, r, 0, 2 * Math.PI)
 		this.ctx.clip()
 
 		for (let index = 1; index < this.colors.length; index += 2) {
