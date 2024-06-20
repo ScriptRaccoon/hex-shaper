@@ -182,7 +182,7 @@ export class Puzzle {
 				continue
 			}
 			last_turn = turn
-			await disk.rotate({ clockwise, speed: Math.PI / 50 })
+			await disk.rotate({ clockwise, speed: Math.PI / 20 })
 		}
 
 		this.finish_scrambling()
