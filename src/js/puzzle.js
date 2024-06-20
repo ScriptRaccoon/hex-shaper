@@ -61,7 +61,7 @@ export class Puzzle {
 		}
 
 		reset_btn.addEventListener("click", () => this.reset())
-		scramble_btn.addEventListener("click", () => this.scramble())
+		scramble_btn.addEventListener("click", () => this.toggle_scramble())
 
 		document.addEventListener("keydown", (e) => {
 			this.handle_keydown(e.key)
@@ -146,6 +146,17 @@ export class Puzzle {
 	}
 
 	/**
+	 * Toggle scrambling the puzzle
+	 */
+	toggle_scramble() {
+		if (this.scrambling) {
+			this.scrambling = false
+		} else {
+			this.scramble()
+		}
+	}
+
+	/**
 	 * Scramble the puzzle by rotating random disks in random directions
 	 * @param {number} [number_turns] - The number of turns to scramble the puzzle
 	 * @async
@@ -161,6 +172,7 @@ export class Puzzle {
 		let last_turn = null
 
 		for (let i = 0; i < number_turns; i++) {
+			if (!this.scrambling) break
 			const disk = this.disks[Math.floor(Math.random() * this.disks.length)]
 			const clockwise = Math.random() < 0.5
 			const turn = { id: disk.id, clockwise }
@@ -170,7 +182,7 @@ export class Puzzle {
 				continue
 			}
 			last_turn = turn
-			await disk.rotate({ clockwise, speed: Math.PI / 20 })
+			await disk.rotate({ clockwise, speed: Math.PI / 50 })
 		}
 
 		this.finish_scrambling()
@@ -180,9 +192,9 @@ export class Puzzle {
 	 * Prepare the puzzle for scrambling
 	 */
 	prepare_scrambling() {
+		scramble_btn.innerText = "Stop Scramble"
 		this.scrambling = true
 		reset_btn.disabled = true
-		scramble_btn.disabled = true
 
 		for (const disk of this.disks) {
 			disk.prepare_scrambling()
@@ -193,9 +205,9 @@ export class Puzzle {
 	 * Finish scrambling the puzzle
 	 */
 	finish_scrambling() {
+		scramble_btn.innerText = "Scramble"
 		this.scrambling = false
 		reset_btn.disabled = false
-		scramble_btn.disabled = false
 
 		for (const disk of this.disks) {
 			disk.finish_scrambling()
