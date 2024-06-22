@@ -158,11 +158,11 @@ export class Puzzle {
 
 	/**
 	 * Scramble the puzzle by rotating random disks in random directions
-	 * @param {number} [number_turns] - The number of turns to scramble the puzzle
 	 * @async
 	 */
-	async scramble(number_turns = 100) {
+	async scramble() {
 		if (this.turning) return
+		const MAX_TURNS = 10_000
 
 		this.prepare_scrambling()
 
@@ -171,7 +171,7 @@ export class Puzzle {
 		 */
 		let last_turn = null
 
-		for (let i = 0; i < number_turns; i++) {
+		for (let i = 0; i < MAX_TURNS; i++) {
 			if (!this.scrambling) break
 			const disk = this.disks[Math.floor(Math.random() * this.disks.length)]
 			const clockwise = Math.random() < 0.5
