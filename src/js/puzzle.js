@@ -28,6 +28,11 @@ export class Puzzle {
 		 */
 		this.scrambling = false
 
+		/**
+		 * Whether the user is trying to reset the puzzle
+		 */
+		this.resetting = false
+
 		this.setup()
 		this.load_state_from_storage()
 		this.draw()
@@ -120,15 +125,38 @@ export class Puzzle {
 	}
 
 	/**
-	 * Resets all disks in the puzzle and redraws them
+	 * Resets all disks in the puzzle and redraws them.
+	 * Asks the user to confirm the reset.
 	 */
 	reset() {
 		if (this.turning) return
+
+		if (!this.resetting) {
+			return this.ask_reset()
+		}
+
 		for (const disk of this.disks) {
 			disk.reset()
 		}
 		this.draw()
 		this.save_state_to_storage()
+
+		this.resetting = false
+		reset_btn.innerText = "Reset"
+	}
+
+	/**
+	 * Ask the user to confirm the reset
+	 */
+	ask_reset() {
+		this.resetting = true
+		reset_btn.innerText = "Sure?"
+		setTimeout(() => {
+			if (this.resetting) {
+				this.resetting = false
+				reset_btn.innerText = "Reset"
+			}
+		}, 3000)
 	}
 
 	/**
