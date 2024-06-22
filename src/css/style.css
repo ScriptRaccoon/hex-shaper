@@ -117,6 +117,7 @@
 	summary {
 		font-weight: 600;
 		cursor: pointer;
+		width: fit-content;
 	}
 
 	summary:focus-visible {
