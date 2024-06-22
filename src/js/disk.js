@@ -73,7 +73,7 @@ export class Disk {
 
 		this.canvas.addEventListener("click", async (e) => {
 			if (!this.enabled) return
-			const clockwise = e.clientX - canvas_left > this.canvas.width / 2
+			const clockwise = e.clientX - canvas_left > size / 2
 			await this.rotate({ clockwise })
 		})
 
