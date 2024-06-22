@@ -29,7 +29,47 @@ export class Puzzle {
 		this.scrambling = false
 
 		this.setup()
+		this.load_state_from_storage()
 		this.draw()
+	}
+
+	/**
+	 * The state of the puzzle, used for saving and loading
+	 * @returns {string[][]}
+	 */
+	get state() {
+		return this.disks.map((disk) => disk.colors)
+	}
+
+	/**
+	 * Save the state of the puzzle to local storage.
+	 * This runs whenever a disk rotates or the puzzle is reset.
+	 */
+	save_state_to_storage() {
+		localStorage.setItem("state", JSON.stringify(this.state))
+	}
+
+	/**
+	 * Load the state of the puzzle from local storage.
+	 * This runs when the puzzle is created.
+	 */
+	load_state_from_storage() {
+		try {
+			const saved_state = localStorage.getItem("state")
+			if (!saved_state) {
+				console.info("No saved state found in storage")
+				return
+			}
+			/**
+			 * @type {string[][]}
+			 */
+			const state = JSON.parse(saved_state)
+			for (let i = 0; i < state.length; i++) {
+				this.disks[i].colors = state[i]
+			}
+		} catch (_) {
+			console.error("Failed to load state from storage")
+		}
 	}
 
 	/**
@@ -44,7 +84,9 @@ export class Puzzle {
 				for (const disky of this.disks) {
 					disky.enabled = true
 				}
+				this.save_state_to_storage()
 			}
+
 			disk.before_rotate = () => {
 				for (const disky of this.disks) {
 					disky.enabled = false
@@ -86,6 +128,7 @@ export class Puzzle {
 			disk.reset()
 		}
 		this.draw()
+		this.save_state_to_storage()
 	}
 
 	/**

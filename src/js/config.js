@@ -29,6 +29,11 @@ export const h = 0.5 * Math.sqrt(3) * l
 export const w = Math.round(0.01 * vmin)
 
 /**
+ * key to save the state in local storage
+ */
+export const STORAGE_KEY = "state"
+
+/**
  * Colors of the pieces
  */
 export const COLORS = Object.freeze({
