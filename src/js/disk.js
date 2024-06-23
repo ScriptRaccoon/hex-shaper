@@ -10,6 +10,7 @@ export class Disk {
 	static DEFAULT_SPEED = Math.PI / 40
 
 	/**
+	 * Create a disk
 	 * @param {import("./config.js").DiskData} data - The data for the disk
 	 */
 	constructor(data) {

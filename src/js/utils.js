@@ -42,3 +42,21 @@ export function draw_circle(ctx, x, y, r, color) {
 export function rotate_array_left(arr, n) {
 	return arr.slice(n).concat(arr.slice(0, n))
 }
+
+/**
+ * Checks if a state is valid
+ * @param {unknown} state
+ * @returns {state is string[][]}
+ */
+export function validate(state) {
+	return (
+		Array.isArray(state) &&
+		state.length == 3 &&
+		state.every(
+			(colors) =>
+				Array.isArray(colors) &&
+				colors.length == 12 &&
+				colors.every((color) => typeof color == "string" && color.length > 0)
+		)
+	)
+}

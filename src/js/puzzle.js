@@ -3,12 +3,15 @@
 import { reset_btn, scramble_btn, status_element } from "./dom.js"
 import { disk1_data, disk2_data, disk3_data } from "./config.js"
 import { Disk } from "./disk.js"
-import { rotate_array_left } from "./utils.js"
+import { rotate_array_left, validate } from "./utils.js"
 
 /**
  * Puzzle class representing the Hex Shaper
  */
 export class Puzzle {
+	/**
+	 * Create the puzzle
+	 */
 	constructor() {
 		/**
 		 * The currently focussed disk
@@ -31,7 +34,7 @@ export class Puzzle {
 		/**
 		 * Whether the user is trying to reset the puzzle
 		 */
-		this.resetting = false
+		this.try_to_reset = false
 
 		this.setup()
 		this.load_state_from_storage()
@@ -66,14 +69,23 @@ export class Puzzle {
 				return
 			}
 			/**
-			 * @type {string[][]}
+			 * @type {unknown}
 			 */
 			const state = JSON.parse(saved_state)
+
+			const state_ok = validate(state)
+			if (!state_ok) {
+				console.warn("Invalid saved state found in storage")
+				return
+			}
+
 			for (let i = 0; i < state.length; i++) {
 				this.disks[i].colors = state[i]
 			}
+
+			console.info("Loaded saved state from storage")
 		} catch (_) {
-			console.error("Failed to load state from storage")
+			console.error("Failed to load saved state from storage")
 		}
 	}
 
@@ -116,6 +128,7 @@ export class Puzzle {
 	 */
 	after_rotate(disk, clockwise) {
 		this.rotate_colors({ disk, clockwise })
+		this.draw()
 		this.save_state_to_storage()
 		this.update_status()
 
@@ -140,7 +153,7 @@ export class Puzzle {
 	reset() {
 		if (this.turning) return
 
-		if (!this.resetting) {
+		if (!this.try_to_reset) {
 			return this.ask_reset()
 		}
 
@@ -150,7 +163,7 @@ export class Puzzle {
 		this.draw()
 		this.save_state_to_storage()
 
-		this.resetting = false
+		this.try_to_reset = false
 		reset_btn.innerText = "Reset"
 	}
 
@@ -158,11 +171,11 @@ export class Puzzle {
 	 * Ask the user to confirm the reset
 	 */
 	ask_reset() {
-		this.resetting = true
+		this.try_to_reset = true
 		reset_btn.innerText = "Sure?"
 		setTimeout(() => {
-			if (this.resetting) {
-				this.resetting = false
+			if (this.try_to_reset) {
+				this.try_to_reset = false
 				reset_btn.innerText = "Reset"
 			}
 		}, 3000)
@@ -221,8 +234,6 @@ export class Puzzle {
 				other_disk.colors[other_index] = disk.colors[index]
 			}
 		}
-
-		this.draw()
 	}
 
 	/**
@@ -310,12 +321,6 @@ export class Puzzle {
 	 * Update the status text of the puzzle
 	 */
 	update_status() {
-		if (this.scrambling) {
-			status_element.innerText = "Scrambling"
-		} else if (this.is_solved) {
-			status_element.innerText = "Solved"
-		} else {
-			status_element.innerText = ""
-		}
+		status_element.innerText = this.scrambling ? "Scrambling" : this.is_solved ? "Solved" : ""
 	}
 }
