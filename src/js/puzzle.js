@@ -1,6 +1,6 @@
 // @ts-check
 
-import { reset_btn, scramble_btn } from "./dom.js"
+import { reset_btn, scramble_btn, status_element } from "./dom.js"
 import { disk1_data, disk2_data, disk3_data } from "./config.js"
 import { Disk } from "./disk.js"
 import { rotate_array_left } from "./utils.js"
@@ -84,13 +84,7 @@ export class Puzzle {
 		this.disks = [new Disk(disk1_data), new Disk(disk2_data), new Disk(disk3_data)]
 
 		for (const disk of this.disks) {
-			disk.after_rotate = /** @type {boolean} */ (clockwise) => {
-				this.rotate_colors({ disk, clockwise })
-				for (const disky of this.disks) {
-					disky.enabled = true
-				}
-				this.save_state_to_storage()
-			}
+			disk.after_rotate = (clockwise) => this.after_rotate(disk, clockwise)
 
 			disk.before_rotate = () => {
 				for (const disky of this.disks) {
@@ -113,6 +107,21 @@ export class Puzzle {
 		document.addEventListener("keydown", (e) => {
 			this.handle_keydown(e.key)
 		})
+	}
+
+	/**
+	 * Handle the rotation of a disk after it has been rotated
+	 * @param {Disk} disk
+	 * @param {boolean} clockwise
+	 */
+	after_rotate(disk, clockwise) {
+		this.rotate_colors({ disk, clockwise })
+		this.save_state_to_storage()
+		this.update_status()
+
+		for (const disky of this.disks) {
+			disky.enabled = true
+		}
 	}
 
 	/**
@@ -270,6 +279,8 @@ export class Puzzle {
 		for (const disk of this.disks) {
 			disk.prepare_scrambling()
 		}
+
+		this.update_status()
 	}
 
 	/**
@@ -282,6 +293,29 @@ export class Puzzle {
 
 		for (const disk of this.disks) {
 			disk.finish_scrambling()
+		}
+
+		this.update_status()
+	}
+
+	/**
+	 * Check if the puzzle is solved
+	 * @returns {boolean}
+	 */
+	get is_solved() {
+		return this.disks.every((disk) => disk.is_solved)
+	}
+
+	/**
+	 * Update the status text of the puzzle
+	 */
+	update_status() {
+		if (this.scrambling) {
+			status_element.innerText = "Scrambling"
+		} else if (this.is_solved) {
+			status_element.innerText = "Solved"
+		} else {
+			status_element.innerText = ""
 		}
 	}
 }

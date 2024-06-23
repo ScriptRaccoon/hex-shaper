@@ -221,4 +221,12 @@ export class Disk {
 		this.canvas.classList.remove("scrambling")
 		this.canvas.setAttribute("tabindex", "0")
 	}
+
+	/**
+	 * Check if the disk is solved, i.e. the colors are in the initial order
+	 * @returns {boolean}
+	 */
+	get is_solved() {
+		return this.colors.every((color, index) => color === this.initial_colors[index])
+	}
 }

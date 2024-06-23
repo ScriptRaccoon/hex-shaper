@@ -56,7 +56,7 @@
 	menu {
 		display: flex;
 		justify-content: center;
-		margin-block: 1.5rem;
+		margin-block: 1.75rem 1.5rem;
 		gap: 1rem;
 	}
 
@@ -112,7 +112,7 @@
 		margin-inline: auto;
 		padding-inline: var(--padding);
 		line-height: 1.5;
-		margin-bottom: 1.5rem;
+		margin-block: 1rem 1.5rem;
 	}
 
 	summary {
@@ -124,5 +124,17 @@
 	summary:focus-visible {
 		outline: 2px solid var(--outline-color);
 		outline-offset: 0.25rem;
+	}
+}
+
+@layer status {
+	#status {
+		position: absolute;
+		bottom: -0.5rem;
+		left: 0;
+		right: 0;
+		text-align: center;
+		color: #bbb;
+		font-size: small;
 	}
 }

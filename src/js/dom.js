@@ -8,3 +8,4 @@ export const canvas3 = /** @type {HTMLCanvasElement} */ (document.querySelector(
 export const ctx1 = /** @type {CanvasRenderingContext2D} */ (canvas1.getContext("2d"))
 export const ctx2 = /** @type {CanvasRenderingContext2D} */ (canvas2.getContext("2d"))
 export const ctx3 = /** @type {CanvasRenderingContext2D} */ (canvas3.getContext("2d"))
+export const status_element = /** @type {HTMLDivElement} */ (document.querySelector("#status"))
