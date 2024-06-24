@@ -60,3 +60,40 @@ export function validate(state) {
 		)
 	)
 }
+
+/**
+ * Disables the scroll reload on mobile devices
+ */
+export function disable_scroll_reload() {
+	let x1 = 0
+	let y1 = 0
+
+	/**
+	 * Sets the initial touch position
+	 * @param {TouchEvent} e
+	 */
+	function handleTouchStart(e) {
+		x1 = e.touches[0].pageX
+		y1 = e.touches[0].pageY
+	}
+
+	/**
+	 * Sets the final touch position and prevents the default behavior
+	 * if the touch was a vertical swipe at the top of the page
+	 * @param {TouchEvent} e
+	 */
+	function handleTouchMove(e) {
+		const x2 = e.touches[0].pageX
+		const y2 = e.touches[0].pageY
+
+		const xd = x2 - x1
+		const yd = y2 - y1
+
+		if (window.scrollY === 0 && Math.abs(xd) < Math.abs(yd) && yd > 0) {
+			e.preventDefault()
+		}
+	}
+
+	document.addEventListener("touchstart", handleTouchStart, { passive: false })
+	document.addEventListener("touchmove", handleTouchMove, { passive: false })
+}
