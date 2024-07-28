@@ -87,6 +87,11 @@ export class Puzzle {
 			}
 
 			console.info("Loaded saved state from storage")
+
+			status_element.innerText = "Loaded saved state"
+			setTimeout(() => {
+				status_element.innerText = ""
+			}, 2000)
 		} catch (_) {
 			console.error("Failed to load saved state from storage")
 		}
