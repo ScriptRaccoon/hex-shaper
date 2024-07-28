@@ -1,9 +1,10 @@
 // @ts-check
 
-import { reset_btn, scramble_btn, status_element } from "./dom.js"
+import { reset_btn, scramble_btn, status_element, timer_btn } from "./dom.js"
 import { disk1_data, disk2_data, disk3_data } from "./config.js"
 import { Disk } from "./disk.js"
 import { rotate_array_left, validate } from "./utils.js"
+import { Timer } from "./timer.js"
 
 /**
  * Puzzle class representing the Hex Shaper
@@ -35,6 +36,8 @@ export class Puzzle {
 		 * Whether the user is trying to reset the puzzle
 		 */
 		this.try_to_reset = false
+
+		this.timer = new Timer()
 
 		this.setup()
 		this.load_state_from_storage()
@@ -135,6 +138,10 @@ export class Puzzle {
 		for (const disky of this.disks) {
 			disky.enabled = true
 		}
+
+		if (this.is_solved) {
+			this.timer.stop()
+		}
 	}
 
 	/**
@@ -162,6 +169,7 @@ export class Puzzle {
 		}
 		this.draw()
 		this.save_state_to_storage()
+		this.timer.reset()
 
 		this.try_to_reset = false
 		reset_btn.innerText = "Reset"
@@ -286,12 +294,14 @@ export class Puzzle {
 		scramble_btn.innerText = "Stop Scramble"
 		this.scrambling = true
 		reset_btn.disabled = true
+		timer_btn.disabled = true
 
 		for (const disk of this.disks) {
 			disk.prepare_scrambling()
 		}
 
 		this.update_status()
+		this.timer.reset()
 	}
 
 	/**
@@ -301,6 +311,7 @@ export class Puzzle {
 		scramble_btn.innerText = "Scramble"
 		this.scrambling = false
 		reset_btn.disabled = false
+		timer_btn.disabled = false
 
 		for (const disk of this.disks) {
 			disk.finish_scrambling()
