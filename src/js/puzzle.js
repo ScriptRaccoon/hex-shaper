@@ -1,9 +1,9 @@
 // @ts-check
 
-import { reset_btn, scramble_btn, status_element, timer_btn } from "./dom.js"
+import { reset_btn, scramble_btn, timer_btn } from "./dom.js"
 import { disk1_data, disk2_data, disk3_data } from "./config.js"
 import { Disk } from "./disk.js"
-import { rotate_array_left, validate } from "./utils.js"
+import { rotate_array_left, show_toast, validate } from "./utils.js"
 import { Timer } from "./timer.js"
 
 /**
@@ -88,10 +88,9 @@ export class Puzzle {
 
 			console.info("Loaded saved state from storage")
 
-			status_element.innerText = "Loaded saved state"
 			setTimeout(() => {
-				status_element.innerText = ""
-			}, 2000)
+				show_toast("Loaded saved state")
+			}, 500)
 		} catch (_) {
 			console.error("Failed to load saved state from storage")
 		}
@@ -138,7 +137,6 @@ export class Puzzle {
 		this.rotate_colors({ disk, clockwise })
 		this.draw()
 		this.save_state_to_storage()
-		this.update_status()
 
 		for (const disky of this.disks) {
 			disky.enabled = true
@@ -146,6 +144,10 @@ export class Puzzle {
 
 		if (this.is_solved) {
 			this.timer.stop()
+		}
+
+		if (this.is_solved) {
+			show_toast("Puzzle solved!")
 		}
 	}
 
@@ -305,7 +307,6 @@ export class Puzzle {
 			disk.prepare_scrambling()
 		}
 
-		this.update_status()
 		this.timer.reset()
 	}
 
@@ -321,8 +322,6 @@ export class Puzzle {
 		for (const disk of this.disks) {
 			disk.finish_scrambling()
 		}
-
-		this.update_status()
 	}
 
 	/**
@@ -331,12 +330,5 @@ export class Puzzle {
 	 */
 	get is_solved() {
 		return this.disks.every((disk) => disk.is_solved)
-	}
-
-	/**
-	 * Update the status text of the puzzle
-	 */
-	update_status() {
-		status_element.innerText = this.scrambling ? "Scrambling" : this.is_solved ? "Solved" : ""
 	}
 }

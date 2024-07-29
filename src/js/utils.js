@@ -1,5 +1,7 @@
 // @ts-check
 
+import { toast_element } from "./dom.js"
+
 /**
  * Clears a canvas context. Uses a threshold
  * to prevent antialiasing artifacts
@@ -96,4 +98,23 @@ export function disable_scroll_reload() {
 
 	document.addEventListener("touchstart", handleTouchStart, { passive: false })
 	document.addEventListener("touchmove", handleTouchMove, { passive: false })
+}
+
+/**
+ * Shows a toast message, and hides it after a short time
+ * @param {string} message
+ */
+export function show_toast(message) {
+	toast_element.innerText = message
+	toast_element.classList.add("visible")
+	setTimeout(() => {
+		toast_element.classList.remove("visible")
+		toast_element.addEventListener(
+			"transitionend",
+			() => {
+				toast_element.innerText = ""
+			},
+			{ once: true }
+		)
+	}, 2500)
 }
